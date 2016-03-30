@@ -74,5 +74,15 @@
      (add-hook 'ruby-mode-hook (lambda ()
                                  (run-hooks 'prelude-ruby-mode-hook)))))
 
+(require 'rspec-mode)
+(rvm-use-default)
+(defadvice rspec-compile (around rspec-compile-around)
+  "Use BASH shell for running the specs because of ZSH issues."
+  (let ((shell-file-name "/bin/bash"))
+    ad-do-it))
+
+(ad-activate 'rspec-compile)
+(global-set-key (kbd "C-x a r") 'rspec-verify-matching)
+(global-set-key (kbd "C-x C-a r") 'rspec-verify-single)
 (provide 'prelude-ruby)
 ;;; prelude-ruby.el ends here

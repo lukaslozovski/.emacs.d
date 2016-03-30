@@ -32,6 +32,13 @@
 ;; Boston, MA 02110-1301, USA.
 
 ;;; Code:
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
 (defvar current-user
       (getenv
        (if (equal system-type 'windows-nt) "USERNAME" "USER")))
@@ -132,4 +139,57 @@ by Prelude.")
  ;; greet the use with some useful tip
  (run-at-time 5 nil 'prelude-tip-of-the-day))
 
+;; My personal shortcuts
+(global-set-key (kbd "C-x a f") 'helm-ag-project-root)
+;; Magit status shortcut
+(global-set-key (kbd "C-x a s") 'magit-status)
+;; Magit push shortcut
+(global-set-key (kbd "C-x a p") 'magit-push)
+;; Magit pull shortcut
+(global-set-key (kbd "C-x C-a p") 'magit-pull)
+;; Magit checkout shrotcut
+(global-set-key (kbd "C-x a c") 'magit-checkout)
+;; Magit merge shortcut
+(global-set-key (kbd "C-x a m") 'magit-merge)
+;; Formatting configuration
+(setq indent-tabs-mode nil)
+(show-paren-mode 1)
+
+(require 'smartparens-config)
+(show-smartparens-global-mode t)
+(smartparens-global-mode t)
+
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
+(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+
+;; Backup files
+(setq make-backup-files nil)
+
+;; Window numbering
+(window-numbering-mode)
+
+;; Desktop save mode
+(require 'desktop)
+(setq desktop-path (list "~/.config/emacs-server"))
+(desktop-save-mode 1)
+
+(require 'multiple-cursors)
+(global-set-key (kbd "C-c C-c") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+
+(global-whitespace-mode 0)
+(add-hook 'before-save-hook 'gofmt-before-save)
+(add-hook 'go-mode-hook 'my-custom-tab-width-fn)
+
+;; Preset width nlinum
+(add-hook 'nlinum-mode-hook
+          (lambda ()
+            (unless (boundp 'nlinum--width)
+              (setq nlinum--width
+                    (length (number-to-string
+                             (count-lines (point-min) (point-max))))))))
+(global-nlinum-mode t)
 ;;; init.el ends here
